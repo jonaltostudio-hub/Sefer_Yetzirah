@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sefer Yetzirah - Interactive Study</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:wght@300;400;600&family=Noto+Sans+Hebrew:wght@400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #1a0f0f;
+            --secondary: #8b7355;
+            --accent: #d4af37;
+            --highlight: #c9a54e;
+            --text: #f4f1ea;
+            --text-secondary: #c9b899;
+            --surface: #2a1f1f;
+            --surface-light: #3a2f2f;
+            --border: #5a4a3a;
+            --success: #6a9955;
+            --info: #4a7b9d;
+        }
+        
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: linear-gradient(135deg, #0a0505 0%, #1a0f0f 50%, #2a1515 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 115, 85, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: mysticalPulse 10s ease-in-out infinite;
+        }
+        
+        @keyframes mysticalPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0 4rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3rem;
+            position: relative;
+            animation: fadeInDown 1s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        header::after {
+            content: '✦';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: var(--accent);
+            font-size: 1.5rem;
+            padding: 0 1rem;
+        }
+        
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+        
+        .tagline {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            animation: fadeIn 1.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .tab-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.8rem 2rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .tab-btn:hover::before {
+            left: 100%;
+        }
+        
+        .tab-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        /* LETTER ATLAS - Combined Explorer */
+        .atlas-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        @media (max-width: 968px) {
+            .atlas-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .letter-tile {
+            aspect-ratio: 1;
+            background: var(--surface-light);
+            border: 2px solid var(--border);
+            color: var(--text);
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .letter-tile:hover {
+            background: var(--secondary);
+            border-color: var(--accent);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            z-index: 5;
+        }
+        
+        .letter-tile.selected {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+            transform: scale(1.15);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+        }
+        
+        .letter-tile::after {
+            content: attr(data-category);
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            font-size: 0.5rem;
+            color: var(--text-secondary);
+            font-family: 'Crimson Pro', serif;
+        }
+        
+        .letter-detail {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 4px;
+            min-height: 600px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .letter-hero {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        
+        .letter-display {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            font-size: 8rem;
+            color: var(--accent);
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .letter-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--highlight);
+            margin-bottom: 0.5rem;
+        }
+        
+        .letter-category {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .correspondence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .correspondence-item {
+            background: var(--surface-light);
+            padding: 1rem;
+            border-left: 3px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+        
+        .correspondence-item:hover {
+            transform: translateX(5px);
+            box-shadow: -5px 0 15px rgba(212, 175, 55, 0.2);
+        }
+        
+        .correspondence-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            color: var(--highlight);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        
+        .correspondence-value {
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+        
+        .letter-meaning {
+            background: var(--surface-light);
+            padding: 1.5rem;
+            border-radius: 4px;
+            border-left: 4px solid var(--highlight);
+            font-style: italic;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        
+        /* GATES WHEEL - Fixed and Enhanced */
+        .gates-section {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .wheel-wrapper {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            margin: 3rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wheel-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--surface-light) 0%, var(--surface) 100%);
+            border: 3px solid var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.3), inset 0 0 60px rgba(0,0,0,0.4);
+        }
+        
+        .wheel-center {
+            position: relative;
+            z-index: 10;
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            font-weight: 700;
+        }
+        
+        .wheel-letter {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--surface);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            z-index: 5;
+        }
+        
+        .wheel-letter:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: scale(1.3);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.7);
+            z-index: 15;
+            border-width: 3px;
+        }
+        
+        .wheel-letter.gate-selected {
+            background: var(--highlight);
+            color: var(--primary);
+            border-color: var(--highlight);
+            box-shadow: 0 0 30px rgba(201, 165, 78, 0.8);
+        }
+        
+        .gate-result {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            padding: 2rem;
+            border-radius: 4px;
+            text-align: center;
+            min-height: 200px;
+        }
+        
+        .gate-combination {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            font-size: 4rem;
+            color: var(--accent);
+            margin: 1rem 0;
+            letter-spacing: 1rem;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .gate-number {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--highlight);
+            margin-bottom: 1rem;
+        }
+        
+        .gate-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* TREE OF LIFE - Fixed Layout */
+        .tree-section {
+            margin-bottom: 6rem;
+        }
+        
+        .tree-wrapper {
+            max-width: 700px;
+            margin: 2rem auto 4rem;
+            position: relative;
+            height: 800px;
+            background: radial-gradient(circle at center, var(--surface-light) 0%, var(--surface) 100%);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+        
+        .tree-sephirah {
+            position: absolute;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 3px solid;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            font-family: 'Cinzel', serif;
+            z-index: 10;
+        }
+        
+        .tree-sephirah:hover {
+            transform: scale(1.25);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
+            z-index: 20;
+        }
+        
+        .tree-sephirah.active {
+            transform: scale(1.3);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.8);
+            z-index: 25;
+        }
+        
+        .sephirah-name {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .sephirah-hebrew {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 0.2rem;
+        }
+        
+        .pillar-severity { background: #4a3447; border-color: #8b5a8b; color: #d4a5d4; }
+        .pillar-mercy { background: #2d3f4f; border-color: #5a8b9d; color: #a5d4e5; }
+        .pillar-balance { background: #4a4a2d; border-color: #9d9d5a; color: #e5e5a5; }
+        
+        .tree-path {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--border), var(--accent), var(--border));
+            transform-origin: left center;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        .sephirah-info {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            padding: 2rem;
+            border-radius: 4px;
+            margin-top: 2rem;
+            min-height: 150px;
+        }
+        
+        .sephirah-info h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        /* GEMATRIA */
+        .gematria-section {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .gematria-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .gematria-input {
+            flex: 1;
+            padding: 1rem;
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            font-size: 1.5rem;
+            background: var(--surface-light);
+            border: 2px solid var(--border);
+            color: var(--text);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .gematria-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .calculate-btn {
+            padding: 1rem 2rem;
+            background: var(--accent);
+            border: none;
+            color: var(--primary);
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        .gematria-result {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            padding: 2rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .gematria-value {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: var(--accent);
+            margin: 1rem 0;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .gematria-breakdown {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            text-align: left;
+        }
+        
+        .letter-value {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface-light);
+            border-radius: 4px;
+            font-family: 'Noto Sans Hebrew', sans-serif;
+        }
+        
+        .letter-value span {
+            color: var(--highlight);
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        /* MEDITATION */
+        .meditation-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            text-align: center;
+        }
+        
+        .meditation-letter {
+            width: 220px;
+            height: 220px;
+            margin: 2rem auto;
+            background: radial-gradient(circle, var(--surface-light), var(--surface));
+            border: 3px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            font-size: 7rem;
+            color: var(--accent);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.4);
+            animation: breathe 4s ease-in-out infinite;
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(212, 175, 55, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(212, 175, 55, 0.6); }
+        }
+        
+        .meditation-timer {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--text);
+            margin: 2rem 0;
+            font-weight: 300;
+        }
+        
+        .meditation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .meditation-btn {
+            padding: 1rem 2rem;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'Cinzel', serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .meditation-btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+        }
+        
+        .meditation-btn.active {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .meditation-guidance {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 4px;
+            margin-top: 3rem;
+            text-align: left;
+            line-height: 1.8;
+        }
+        
+        .meditation-guidance h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--highlight);
+            margin-bottom: 1rem;
+        }
+        
+        /* READ TEXT - Enhanced */
+        .book-section {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .chapter-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .chapter-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--surface-light);
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .chapter-btn:hover {
+            background: var(--secondary);
+            border-color: var(--accent);
+            color: var(--text);
+            transform: scale(1.1);
+        }
+        
+        .chapter-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+            transform: scale(1.15);
+        }
+        
+        .chapter-display {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .chapter-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .chapter-text {
+            line-height: 2;
+            font-size: 1.15rem;
+            text-align: justify;
+        }
+        
+        .chapter-text p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .emphasized {
+            color: var(--highlight);
+            font-weight: 600;
+        }
+        
+        .verse-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: var(--surface-light);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--highlight);
+            margin-right: 0.5rem;
+            font-weight: 600;
+        }
+        
+        /* INFO BOXES */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .info-box strong {
+            color: var(--highlight);
+        }
+        
+        .info-box.tip {
+            border-left-color: var(--info);
+        }
+        
+        .info-box.tip::before {
+            content: '💡 ';
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-top: 6rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .wheel-wrapper {
+                width: 350px;
+                height: 350px;
+            }
+            
+            .wheel-letter {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            .tree-wrapper {
+                height: 600px;
+            }
+            
+            .tree-sephirah {
+                width: 65px;
+                height: 65px;
+            }
+            
+            .sephirah-name {
+                font-size: 0.6rem;
+            }
+            
+            .letter-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ספר יצירה</h1>
+            <p class="subtitle">Sefer Yetzirah · Book of Creation</p>
+            <p class="tagline">"Thirty-Two Wondrous Paths of Wisdom"</p>
+        </header>
+        
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="atlas">Letter Atlas</button>
+            <button class="tab-btn" data-tab="gates">231 Gates</button>
+            <button class="tab-btn" data-tab="tree">Tree of Life</button>
+            <button class="tab-btn" data-tab="gematria">Gematria</button>
+            <button class="tab-btn" data-tab="meditation">Meditation</button>
+            <button class="tab-btn" data-tab="read">Read Book</button>
+        </nav>
+        
+        <!-- LETTER ATLAS TAB -->
+        <div id="atlas" class="tab-content active">
+            <h2 style="text-align: center;">The 22 Letters of Foundation</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem;">
+                Click any letter to explore its mystical correspondences
+            </p>
+            
+            <div class="atlas-layout">
+                <div>
+                    <div class="letter-grid" id="letter-grid">
+                        <!-- Letters will be generated here -->
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>The Three Groups:</strong><br>
+                        • 3 Mothers (אמש) - Elements<br>
+                        • 7 Doubles (בגדכפרת) - Planets<br>
+                        • 12 Simples (הוזחטילנסעצק) - Zodiac
+                    </div>
+                </div>
+                
+                <div class="letter-detail" id="letter-detail">
+                    <div style="text-align: center; color: var(--text-secondary); padding: 5rem 2rem; font-style: italic;">
+                        Select a letter from the grid to begin your exploration
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 231 GATES TAB -->
+        <div id="gates" class="tab-content">
+            <div class="gates-section">
+                <h2 style="text-align: center;">The 231 Gates of Creation</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
+                    Each pair of letters forms a gate through which creative power flows
+                </p>
+                
+                <div class="wheel-wrapper">
+                    <div class="wheel-background"></div>
+                    <div class="wheel-center">231</div>
+                    <div id="wheel-letters-container"></div>
+                </div>
+                
+                <div class="gate-result" id="gate-result">
+                    <h3 style="font-family: 'Cinzel', serif; color: var(--highlight);">Selected Gate</h3>
+                    <div class="gate-combination" id="gate-combo">—</div>
+                    <div class="gate-number" id="gate-number">Select two letters to form a gate</div>
+                    <div class="gate-description" id="gate-description"></div>
+                </div>
+                
+                <div class="info-box">
+                    <strong>How Gates Work:</strong> The 22 letters combine in pairs (22 × 21 ÷ 2 = 231). Each combination creates a unique "gate" or pathway of divine energy. In traditional practice, meditating on these combinations was believed to unlock creative and transformative powers. Click any two letters on the wheel to explore their gate.
+                </div>
+            </div>
+        </div>
+        
+        <!-- TREE OF LIFE TAB -->
+        <div id="tree" class="tab-content">
+            <div class="tree-section">
+                <h2 style="text-align: center;">The Tree of Life & Ten Sefirot</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1rem;">
+                    The mystical structure underlying all creation
+                </p>
+                
+                <div class="tree-wrapper" id="tree-container">
+                    <!-- Tree will be rendered here -->
+                </div>
+                
+                <div class="sephirah-info" id="sephirah-info">
+                    <h3>About the Sefirot</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Click any Sephirah to learn about its qualities and meaning. The Ten Sefirot represent the fundamental emanations through which the Infinite becomes manifest in creation.
+                    </p>
+                </div>
+                
+                <div class="info-box">
+                    <strong>Note:</strong> While Sefer Yetzirah originally described the ten Sefirot as the four elements plus six directions, later Kabbalah developed them into the more familiar names shown here (Keter, Chokhmah, Binah, etc.). This visualization bridges both traditions.
+                </div>
+            </div>
+        </div>
+        
+        <!-- GEMATRIA TAB -->
+        <div id="gematria" class="tab-content">
+            <div class="gematria-section">
+                <h2 style="text-align: center;">Gematria Calculator</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
+                    Discover the numerical essence of Hebrew words
+                </p>
+                
+                <div class="gematria-input-group">
+                    <input type="text" 
+                           class="gematria-input" 
+                           id="gematria-input" 
+                           placeholder="הקלד מילה בעברית"
+                           dir="rtl">
+                    <button class="calculate-btn" onclick="calculateGematria()">Calculate</button>
+                </div>
+                
+                <div class="gematria-result" id="gematria-result" style="display: none;">
+                    <h3 style="font-family: 'Cinzel', serif; color: var(--highlight);">Numerical Value</h3>
+                    <div class="gematria-value" id="gematria-value">0</div>
+                    <div class="gematria-breakdown" id="gematria-breakdown"></div>
+                </div>
+                
+                <div class="info-box">
+                    <strong>Try these words:</strong><br>
+                    • אמת (emet - truth) = 441<br>
+                    • אהבה (ahavah - love) = 13<br>
+                    • חכמה (chokhmah - wisdom) = 73<br>
+                    • יהוה (the Divine Name) = 26
+                </div>
+                
+                <div style="margin-top: 2rem; background: var(--surface); padding: 2rem; border: 1px solid var(--border); border-radius: 4px;">
+                    <h3 style="font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 1rem;">Letter Values</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.5rem;">
+                        <div class="letter-value">א = 1</div>
+                        <div class="letter-value">ב = 2</div>
+                        <div class="letter-value">ג = 3</div>
+                        <div class="letter-value">ד = 4</div>
+                        <div class="letter-value">ה = 5</div>
+                        <div class="letter-value">ו = 6</div>
+                        <div class="letter-value">ז = 7</div>
+                        <div class="letter-value">ח = 8</div>
+                        <div class="letter-value">ט = 9</div>
+                        <div class="letter-value">י = 10</div>
+                        <div class="letter-value">כ = 20</div>
+                        <div class="letter-value">ל = 30</div>
+                        <div class="letter-value">מ = 40</div>
+                        <div class="letter-value">נ = 50</div>
+                        <div class="letter-value">ס = 60</div>
+                        <div class="letter-value">ע = 70</div>
+                        <div class="letter-value">פ = 80</div>
+                        <div class="letter-value">צ = 90</div>
+                        <div class="letter-value">ק = 100</div>
+                        <div class="letter-value">ר = 200</div>
+                        <div class="letter-value">ש = 300</div>
+                        <div class="letter-value">ת = 400</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MEDITATION TAB -->
+        <div id="meditation" class="tab-content">
+            <div class="meditation-container">
+                <h2>Letter Meditation</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                    Contemplate the sacred letters in focused silence
+                </p>
+                
+                <div class="meditation-letter" id="meditation-letter">א</div>
+                
+                <div style="margin: 2rem 0;">
+                    <h3 style="font-family: 'Cinzel', serif; color: var(--highlight); margin-bottom: 0.5rem;" id="meditation-name">Alef</h3>
+                    <p style="color: var(--text-secondary); font-style: italic;" id="meditation-quality">Mother Letter · Air · Balance</p>
+                </div>
+                
+                <div class="meditation-timer" id="meditation-timer">5:00</div>
+                
+                <div class="meditation-controls">
+                    <button class="meditation-btn" onclick="previousLetter()">← Previous</button>
+                    <button class="meditation-btn" id="meditation-toggle" onclick="toggleMeditation()">Start</button>
+                    <button class="meditation-btn" onclick="nextLetter()">Next →</button>
+                    <button class="meditation-btn" onclick="resetTimer()">Reset</button>
+                </div>
+                
+                <div class="meditation-guidance">
+                    <h3>Meditation Practice</h3>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Step 1:</strong> Gaze softly at the letter above, allowing your eyes to rest on its form.
+                    </p>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Step 2:</strong> Breathe deeply and imagine the letter glowing with golden light.
+                    </p>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Step 3:</strong> As you breathe, contemplate the letter's meaning and correspondences.
+                    </p>
+                    <p>
+                        <strong>Step 4:</strong> When the timer completes, journal your insights or move to the next letter.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- READ BOOK TAB -->
+        <div id="read" class="tab-content">
+            <div class="book-section">
+                <h2 style="text-align: center;">The Book of Creation</h2>
+                
+                <div class="chapter-nav">
+                    <button class="chapter-btn active" data-chapter="1">1</button>
+                    <button class="chapter-btn" data-chapter="2">2</button>
+                    <button class="chapter-btn" data-chapter="3">3</button>
+                    <button class="chapter-btn" data-chapter="4">4</button>
+                    <button class="chapter-btn" data-chapter="5">5</button>
+                    <button class="chapter-btn" data-chapter="6">6</button>
+                </div>
+                
+                <div class="chapter-display">
+                    <div id="chapter-content">
+                        <!-- Chapter will load here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>✦ An Interactive Study Tool for Sefer Yetzirah ✦</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem;">Combining ancient wisdom with modern technology</p>
+        </footer>
+    </div>
+    
+    <script>
+        // LETTER DATA
+        const letterData = {
+            alef: { hebrew: 'א', name: 'Alef', cat: 'M', category: 'Mother', element: 'Air (Ruach)', world: 'Air mediating Heaven & Earth', year: 'Satiation (balance)', person: 'Chest (breath)', meaning: 'Alef represents unity and the breath of life. Silent yet powerful, it is the first letter and symbolizes the One from which all emerges.' },
+            mem: { hebrew: 'מ', name: 'Mem', cat: 'M', category: 'Mother', element: 'Water (Mayim)', world: 'Earth (physical matter)', year: 'Cold (winter)', person: 'Belly (transformation)', meaning: 'Mem represents the primordial waters of creation. Closed and open forms symbolize hidden and revealed wisdom.' },
+            shin: { hebrew: 'ש', name: 'Shin', cat: 'M', category: 'Mother', element: 'Fire (Esh)', world: 'Heavens (upper realm)', year: 'Heat (summer)', person: 'Head (consciousness)', meaning: 'Shin represents divine fire and transformation. Its three heads symbolize the threefold flame of creation.' },
+            bet: { hebrew: 'ב', name: 'Bet', cat: 'D', category: 'Double', quality: 'Life ⟷ Death', planet: 'Saturn', day: 'Sunday', person: 'Right Eye', meaning: 'Bet means "house" - the container of existence. First letter of Torah, beginning creation.' },
+            gimel: { hebrew: 'ג', name: 'Gimel', cat: 'D', category: 'Double', quality: 'Peace ⟷ Conflict', planet: 'Jupiter', day: 'Monday', person: 'Left Eye', meaning: 'Gimel represents giving and benevolence, but also capacity for strife when balance is lost.' },
+            dalet: { hebrew: 'ד', name: 'Dalet', cat: 'D', category: 'Double', quality: 'Wisdom ⟷ Folly', planet: 'Mars', day: 'Tuesday', person: 'Right Ear', meaning: 'Dalet means "door" - threshold between knowledge and ignorance.' },
+            kaf: { hebrew: 'כ', name: 'Kaf', cat: 'D', category: 'Double', quality: 'Wealth ⟷ Poverty', planet: 'Sun', day: 'Wednesday', person: 'Left Ear', meaning: 'Kaf means "palm" - open hand that receives or gives, abundance or lack.' },
+            peh: { hebrew: 'פ', name: 'Peh', cat: 'D', category: 'Double', quality: 'Beauty ⟷ Ugliness', planet: 'Venus', day: 'Thursday', person: 'Right Nostril', meaning: 'Peh means "mouth" - organ of expression, creating beauty through speech or ugliness through cursing.' },
+            resh: { hebrew: 'ר', name: 'Resh', cat: 'D', category: 'Double', quality: 'Fertility ⟷ Barrenness', planet: 'Mercury', day: 'Friday', person: 'Left Nostril', meaning: 'Resh represents head, leadership, and capacity to multiply or remain sterile.' },
+            tav: { hebrew: 'ת', name: 'Tav', cat: 'D', category: 'Double', quality: 'Dominion ⟷ Servitude', planet: 'Moon', day: 'Saturday', person: 'Mouth', meaning: 'Tav is the last letter, representing completion and the seal of truth.' },
+            heh: { hebrew: 'ה', name: 'Heh', cat: 'S', category: 'Simple', zodiac: '♈ Aries', month: 'Nisan', person: 'Right Hand', func: 'Seeing', meaning: 'Heh represents revelation - the window through which divine light enters.' },
+            vav: { hebrew: 'ו', name: 'Vav', cat: 'S', category: 'Simple', zodiac: '♉ Taurus', month: 'Iyyar', person: 'Left Hand', func: 'Hearing', meaning: 'Vav is the hook connecting heaven and earth, joining concepts together.' },
+            zayin: { hebrew: 'ז', name: 'Zayin', cat: 'S', category: 'Simple', zodiac: '♊ Gemini', month: 'Siwan', person: 'Right Leg', func: 'Smelling', meaning: 'Zayin represents the sword - discernment cutting through illusion.' },
+            chet: { hebrew: 'ח', name: 'Chet', cat: 'S', category: 'Simple', zodiac: '♋ Cancer', month: 'Tammuz', person: 'Left Leg', func: 'Talking', meaning: 'Chet represents life force, the fence that protects and defines.' },
+            tet: { hebrew: 'ט', name: 'Tet', cat: 'S', category: 'Simple', zodiac: '♌ Leo', month: 'Av', person: 'Right Kidney', func: 'Eating', meaning: 'Tet represents hidden good, the vessel that contains the sacred.' },
+            yod: { hebrew: 'י', name: 'Yod', cat: 'S', category: 'Simple', zodiac: '♍ Virgo', month: 'Elul', person: 'Left Kidney', func: 'Sex', meaning: 'Yod is smallest letter, representing divine spark reaching into creation.' },
+            lamed: { hebrew: 'ל', name: 'Lamed', cat: 'S', category: 'Simple', zodiac: '♎ Libra', month: 'Tishri', person: 'Liver', func: 'Work', meaning: 'Lamed means "to learn" - heart\'s aspiration reaching toward heaven.' },
+            nun: { hebrew: 'נ', name: 'Nun', cat: 'S', category: 'Simple', zodiac: '♏ Scorpio', month: 'Marcheshwan', person: 'Spleen', func: 'Movement', meaning: 'Nun represents faithfulness, swimming through waters of existence.' },
+            samech: { hebrew: 'ס', name: 'Samech', cat: 'S', category: 'Simple', zodiac: '♐ Sagittarius', month: 'Kislew', person: 'Gall', func: 'Excitement', meaning: 'Samech represents divine support upholdingall creation.' },
+            ayin: { hebrew: 'ע', name: 'Ayin', cat: 'S', category: 'Simple', zodiac: '♑ Capricorn', month: 'Tevet', person: 'Rumen', func: 'Play', meaning: 'Ayin means "eye" - seeing physical and spiritual realities.' },
+            tzadi: { hebrew: 'צ', name: 'Tzadi', cat: 'S', category: 'Simple', zodiac: '♒ Aquarius', month: 'Shevat', person: 'Abomasum', func: 'Contemplation', meaning: 'Tzadi represents the righteous one, standing firm in conviction.' },
+            qof: { hebrew: 'ק', name: 'Qof', cat: 'S', category: 'Simple', zodiac: '♓ Pisces', month: 'Adar', person: 'Craw', func: 'Sleep', meaning: 'Qof represents holiness and cyclical time, completion of the year.' }
+        };
+        
+        const letterOrder = ['alef', 'bet', 'gimel', 'dalet', 'heh', 'vav', 'zayin', 'chet', 'tet', 'yod', 'kaf', 'lamed', 'mem', 'nun', 'samech', 'ayin', 'peh', 'tzadi', 'qof', 'resh', 'shin', 'tav'];
+        
+        // CHAPTERS DATA
+        const chapters = {
+            1: {
+                title: 'Chapter 1: The Ten Sefirot',
+                verses: [
+                    '<span class="emphasized">YAH, ADONAI of Hosts, God of Israel, Living God and King of the World, EL SHADDAI,</span> Merciful and Gracious, High and Exalted, Dwelling Ever Above, Holy Is His Name—He carved and created His World in <span class="emphasized">Thirty-Two Wondrous Ways of Wisdom</span>, with three linguistic tools: with Counting, with Writing, and with Speech.',
+                    '<span class="emphasized">Ten SEFIROT BELIMAH</span> and <span class="emphasized">Twenty-Two Letters of Foundation:</span> Three Mothers, Seven Pairs, and Twelve Simple Letters.',
+                    '<span class="emphasized">Ten SEFIROT BELIMAH—</span>The count of ten fingers, five against five, with the Covenant of the Unique One established in the center, like a word of the tongue and circumcision of the genitals.',
+                    '<span class="emphasized">Ten and not nine, ten and not eleven.</span> Understand with Wisdom and become wise with Understanding; test with them and probe of them.',
+                    '<span class="emphasized">Ten SEFIROT BELIMAH—</span>Their measure is ten; they have no edge. Depth of Beginning, Depth of End; Depth of Good, Depth of Evil; Depth of Above, Depth of Below; Depth of East, Depth of West; Depth of North, Depth of South.',
+                    'The Unique Lord EL, the faithful king, governs them all from His Holy Abode, forever and ever and ever.'
+                ]
+            },
+            2: {
+                title: 'Chapter 2: The Twenty-Two Letters',
+                verses: [
+                    '<span class="emphasized">Twenty-Two Letters of Foundation—</span>He carved them, and hewed them, and weighed them, and exchanged them, and combined them, and formed with them the soul of every formed being.',
+                    '<span class="emphasized">Fixed in a wheel with 231 gates.</span> The wheel turns back and forth.',
+                    'There is nothing in goodness higher than <span class="emphasized">Delight</span>, and nothing in evil lower than <span class="emphasized">Affliction</span>.',
+                    'How did He weigh and transform them? Alef with them all and all of them with Alef; Bet with them all and all of them with Bet.',
+                    'And so it turns, such that all matter is found and all speech emerges into one name.'
+                ]
+            },
+            3: {
+                title: 'Chapter 3: The Three Mothers',
+                verses: [
+                    '<span class="emphasized">Three Mothers, Alef-Mem-Shin—</span>A great secret, concealed and covered and sealed in Six Rings.',
+                    '<span class="emphasized">In the World are Air, Water, Fire.</span> The heavens were created first from Fire, and the earth is created from Water, and the Air decides between them.',
+                    '<span class="emphasized">In the Year are Fire, Water, and Wind.</span> Heat was created from Fire, and cold from Water, and satiation from Wind deciding between them.',
+                    '<span class="emphasized">In the Person are Fire, Water, and Wind.</span> The head was created from Fire, the belly was created from Water, and the chest from Wind decides between them.',
+                    'He made the letter <span class="emphasized">Alef</span> reign over Wind, and sealed with it the Air in the World, satiation in the Year, and the chest in the Person.'
+                ]
+            },
+            4: {
+                title: 'Chapter 4: The Seven Doubles',
+                verses: [
+                    '<span class="emphasized">Seven Pairs, Begad-Kafrat</span>—their foundation is Life, Peace, Wisdom, Wealth, Beauty, Fertility, and Dominion.',
+                    '<span class="emphasized">Pairs, for they are opposites:</span> Life ⟷ Death, Peace ⟷ Evil, Wisdom ⟷ Folly, Wealth ⟷ Poverty, Beauty ⟷ Ugliness, Fertility ⟷ Barrenness, Dominion ⟷ Servitude.',
+                    '<span class="emphasized">Seven and not six, seven and not eight.</span> Test with them and probe of them.',
+                    'He formed with them the <span class="emphasized">stars in the World</span>, the <span class="emphasized">days in the Year</span>, and the <span class="emphasized">gates in the Person</span>.',
+                    'For this reason, He loved the Seventh Day more than anything under all the heavens.'
+                ]
+            },
+            5: {
+                title: 'Chapter 5: The Twelve Simples',
+                verses: [
+                    '<span class="emphasized">Twelve Simple Letters</span>—Their foundation is Seeing, Hearing, Smelling, Talking, Eating, Sex, Work, Movement, Excitement, Play, Contemplation, Sleep.',
+                    'Their measure is the <span class="emphasized">Twelve Diagonal Borders</span>—They extend outwards and go on forever. <span class="emphasized">They are the Arms of the World.</span>',
+                    'He formed with them the <span class="emphasized">Twelve Constellations in the World</span>, the <span class="emphasized">Twelve Months in the Year</span>, and the <span class="emphasized">Twelve Leaders in the Person</span>.',
+                    'Like what did He make them? Strife. Like what did He arrange them? War.'
+                ]
+            },
+            6: {
+                title: 'Chapter 6: The Synthesis',
+                verses: [
+                    'Three Fathers and their descendants, Seven Stars and their hosts, and Twelve Diagonal Borders.',
+                    'An edict—<span class="emphasized">the Dragon Teli, and the Wheel, and the Heart.</span>',
+                    '<span class="emphasized">Teli is in the World</span> like a king on his throne; <span class="emphasized">the Wheel is in the Year</span> like a king in the city; <span class="emphasized">the Heart is in the Person</span> like a king in war.',
+                    'God made all things as this one compared to that one: good compared to evil, better and best and a worse and worst.',
+                    'And as soon as our father <span class="emphasized">Abraham</span>, peace be upon him, had viewed and witnessed and seen and searched and understood and carved and hewn and exchanged and formed, he raised up his hand.',
+                    '<span class="emphasized">The Lord of All, Blessed Is He, revealed Himself to him.</span> He returned him to his bosom and kissed him upon the head, and called him, "My beloved," and cut a covenant for him and his seed.'
+                ]
+            }
+        };
+        
+        // SEPHIROT DATA
+        const sephirotData = [
+            { name: 'Keter', hebrew: 'כתר', meaning: 'Crown', desc: 'The infinite source, will of the Divine, beyond comprehension', x: 307.5, y: 30, class: 'pillar-balance' },
+            { name: 'Chokhmah', hebrew: 'חכמה', meaning: 'Wisdom', desc: 'Divine flash of insight, primordial point of creation', x: 480, y: 110, class: 'pillar-mercy' },
+            { name: 'Binah', hebrew: 'בינה', meaning: 'Understanding', desc: 'The palace of form, giving structure to wisdom', x: 135, y: 110, class: 'pillar-severity' },
+            { name: 'Chesed', hebrew: 'חסד', meaning: 'Mercy', desc: 'Loving-kindness, expansion, boundless giving', x: 480, y: 230, class: 'pillar-mercy' },
+            { name: 'Gevurah', hebrew: 'גבורה', meaning: 'Severity', desc: 'Strength, judgment, necessary limitation', x: 135, y: 230, class: 'pillar-severity' },
+            { name: 'Tiferet', hebrew: 'תפארת', meaning: 'Beauty', desc: 'Harmony, balance, the heart integrating all forces', x: 307.5, y: 290, class: 'pillar-balance' },
+            { name: 'Netzach', hebrew: 'נצח', meaning: 'Victory', desc: 'Eternity, endurance, active force in the world', x: 480, y: 410, class: 'pillar-mercy' },
+            { name: 'Hod', hebrew: 'הוד', meaning: 'Glory', desc: 'Splendor, receptive force, intellectual structure', x: 135, y: 410, class: 'pillar-severity' },
+            { name: 'Yesod', hebrew: 'יסוד', meaning: 'Foundation', desc: 'The channel connecting heaven and earth', x: 307.5, y: 530, class: 'pillar-balance' },
+            { name: 'Malkhut', hebrew: 'מלכות', meaning: 'Kingdom', desc: 'Physical manifestation, the receptive vessel', x: 307.5, y: 680, class: 'pillar-balance' }
+        ];
+        
+        const sephirotPaths = [[0,1],[0,2],[1,2],[1,3],[2,4],[3,4],[3,5],[4,5],[5,6],[5,7],[6,7],[6,8],[7,8],[8,9]];
+        
+        // Gematria values
+        const gematriaValues = {
+            'א': 1, 'ב': 2, 'ג': 3, 'ד': 4, 'ה': 5, 'ו': 6, 'ז': 7, 'ח': 8, 'ט': 9, 'י': 10,
+            'כ': 20, 'ך': 20, 'ל': 30, 'מ': 40, 'ם': 40, 'נ': 50, 'ן': 50, 'ס': 60, 'ע': 70,
+            'פ': 80, 'ף': 80, 'צ': 90, 'ץ': 90, 'ק': 100, 'ר': 200, 'ש': 300, 'ת': 400
+        };
+        
+        // MEDITATION STATE
+        let currentMeditationIndex = 0;
+        let meditationInterval = null;
+        let meditationTime = 300;
+        let meditationRunning = false;
+        
+        // GATES STATE
+        let selectedGateLetters = [];
+        
+        // ===== TAB SWITCHING =====
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById(tabName).classList.add('active');
+                
+                if (tabName === 'gates' && document.getElementById('wheel-letters-container').children.length === 0) {
+                    initializeWheel();
+                }
+                if (tabName === 'tree' && document.getElementById('tree-container').children.length === 0) {
+                    initializeTree();
+                }
+            });
+        });
+        
+        // ===== LETTER ATLAS =====
+        function initializeLetterGrid() {
+            const grid = document.getElementById('letter-grid');
+            letterOrder.forEach(key => {
+                const data = letterData[key];
+                const tile = document.createElement('div');
+                tile.className = 'letter-tile';
+                tile.textContent = data.hebrew;
+                tile.dataset.letter = key;
+                tile.dataset.category = data.cat;
+                tile.addEventListener('click', () => showLetterDetail(key));
+                grid.appendChild(tile);
+            });
+        }
+        
+        function showLetterDetail(key) {
+            const data = letterData[key];
+            document.querySelectorAll('.letter-tile').forEach(t => t.classList.remove('selected'));
+            document.querySelector(`[data-letter="${key}"]`).classList.add('selected');
+            
+            let html = `
+                <div class="letter-hero">
+                    <div class="letter-display">${data.hebrew}</div>
+                    <div class="letter-name">${data.name}</div>
+                    <div class="letter-category">${data.category} Letter</div>
+                </div>
+            `;
+            
+            html += '<div class="correspondence-grid">';
+            
+            if (data.element) {
+                html += `
+                    <div class="correspondence-item"><div class="correspondence-label">Element</div><div class="correspondence-value">${data.element}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">World</div><div class="correspondence-value">${data.world}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">Year</div><div class="correspondence-value">${data.year}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">Person</div><div class="correspondence-value">${data.person}</div></div>
+                `;
+            } else if (data.planet) {
+                html += `
+                    <div class="correspondence-item"><div class="correspondence-label">Quality</div><div class="correspondence-value">${data.quality}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">Planet</div><div class="correspondence-value">${data.planet}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">Day</div><div class="correspondence-value">${data.day}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">Person</div><div class="correspondence-value">${data.person}</div></div>
+                `;
+            } else {
+                html += `
+                    <div class="correspondence-item"><div class="correspondence-label">Zodiac</div><div class="correspondence-value">${data.zodiac}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">Month</div><div class="correspondence-value">${data.month}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">Person</div><div class="correspondence-value">${data.person}</div></div>
+                    <div class="correspondence-item"><div class="correspondence-label">Function</div><div class="correspondence-value">${data.func}</div></div>
+                `;
+            }
+            
+            html += '</div>';
+            html += `<div class="letter-meaning">${data.meaning}</div>`;
+            
+            document.getElementById('letter-detail').innerHTML = html;
+        }
+        
+        // ===== GATES WHEEL =====
+        function initializeWheel() {
+            const container = document.getElementById('wheel-letters-container');
+            const letters = letterOrder.map(k => letterData[k].hebrew);
+            const radius = 240;
+            const centerX = 300;
+            const centerY = 300;
+            
+            letters.forEach((letter, i) => {
+                const angle = (i / letters.length) * 2 * Math.PI - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle) - 25;
+                const y = centerY + radius * Math.sin(angle) - 25;
+                
+                const div = document.createElement('div');
+                div.className = 'wheel-letter';
+                div.textContent = letter;
+                div.style.left = x + 'px';
+                div.style.top = y + 'px';
+                div.dataset.letter = letter;
+                
+                div.addEventListener('click', () => selectGateLetter(letter, div));
+                
+                container.appendChild(div);
+            });
+        }
+        
+        function selectGateLetter(letter, element) {
+            if (selectedGateLetters.length < 2) {
+                selectedGateLetters.push(letter);
+                element.classList.add('gate-selected');
+                
+                if (selectedGateLetters.length === 2) {
+                    displayGate();
+                }
+            } else {
+                // Reset
+                document.querySelectorAll('.wheel-letter').forEach(l => l.classList.remove('gate-selected'));
+                selectedGateLetters = [letter];
+                element.classList.add('gate-selected');
+                document.getElementById('gate-combo').textContent = letter;
+                document.getElementById('gate-number').textContent = 'Select a second letter';
+                document.getElementById('gate-description').textContent = '';
+            }
+        }
+        
+        function displayGate() {
+            const combo = selectedGateLetters.join(' · ');
+            const gateNum = Math.floor(Math.random() * 231) + 1; // Placeholder
+            
+            document.getElementById('gate-combo').textContent = combo;
+            document.getElementById('gate-number').textContent = `Gate ${gateNum} of 231`;
+            document.getElementById('gate-description').textContent = `This combination creates a unique channel of creative energy. Traditional Kabbalists would meditate on such gates to access deeper layers of reality and invoke specific spiritual forces. Each of the 231 gates represents a distinct pathway through which divine influence flows into manifestation.`;
+        }
+        
+        // ===== TREE OF LIFE =====
+        function initializeTree() {
+            const container = document.getElementById('tree-container');
+            
+            // Draw paths
+            sephirotPaths.forEach(([from, to]) => {
+                const s1 = sephirotData[from];
+                const s2 = sephirotData[to];
+                const x1 = s1.x + 42.5;
+                const y1 = s1.y + 42.5;
+                const x2 = s2.x + 42.5;
+                const y2 = s2.y + 42.5;
+                
+                const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                
+                const path = document.createElement('div');
+                path.className = 'tree-path';
+                path.style.width = length + 'px';
+                path.style.left = x1 + 'px';
+                path.style.top = y1 + 'px';
+                path.style.transform = `rotate(${angle}deg)`;
+                container.appendChild(path);
+            });
+            
+            // Draw sefirot
+            sephirotData.forEach((s, i) => {
+                const div = document.createElement('div');
+                div.className = `tree-sephirah ${s.class}`;
+                div.style.left = s.x + 'px';
+                div.style.top = s.y + 'px';
+                div.innerHTML = `<div class="sephirah-name">${s.name}</div><div class="sephirah-hebrew">${s.hebrew}</div>`;
+                div.addEventListener('click', () => showSephirahInfo(s));
+                container.appendChild(div);
+            });
+        }
+        
+        function showSephirahInfo(sephirah) {
+            document.querySelectorAll('.tree-sephirah').forEach(s => s.classList.remove('active'));
+            event.target.closest('.tree-sephirah').classList.add('active');
+            
+            document.getElementById('sephirah-info').innerHTML = `
+                <h3>${sephirah.name} (${sephirah.hebrew}) - ${sephirah.meaning}</h3>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 1rem;">
+                    ${sephirah.desc}
+                </p>
+            `;
+        }
+        
+        // ===== GEMATRIA =====
+        function calculateGematria() {
+            const input = document.getElementById('gematria-input').value.trim();
+            if (!input) return;
+            
+            let total = 0;
+            let breakdown = '';
+            
+            for (let char of input) {
+                if (gematriaValues[char]) {
+                    total += gematriaValues[char];
+                    breakdown += `<div class="letter-value">${char} <span>= ${gematriaValues[char]}</span></div>`;
+                }
+            }
+            
+            document.getElementById('gematria-value').textContent = total;
+            document.getElementById('gematria-breakdown').innerHTML = breakdown;
+            document.getElementById('gematria-result').style.display = 'block';
+        }
+        
+        document.getElementById('gematria-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') calculateGematria();
+        });
+        
+        // ===== MEDITATION =====
+        function updateMeditationDisplay() {
+            const key = letterOrder[currentMeditationIndex];
+            const data = letterData[key];
+            
+            document.getElementById('meditation-letter').textContent = data.hebrew;
+            document.getElementById('meditation-name').textContent = data.name;
+            
+            let quality = data.category + ' Letter';
+            if (data.element) quality += ' · ' + data.element.split('(')[0];
+            else if (data.planet) quality += ' · ' + data.planet;
+            else if (data.zodiac) quality += ' · ' + data.zodiac;
+            
+            document.getElementById('meditation-quality').textContent = quality;
+        }
+        
+        function nextLetter() {
+            currentMeditationIndex = (currentMeditationIndex + 1) % letterOrder.length;
+            updateMeditationDisplay();
+            resetTimer();
+        }
+        
+        function previousLetter() {
+            currentMeditationIndex = (currentMeditationIndex - 1 + letterOrder.length) % letterOrder.length;
+            updateMeditationDisplay();
+            resetTimer();
+        }
+        
+        function toggleMeditation() {
+            if (meditationRunning) {
+                pauseMeditation();
+            } else {
+                startMeditation();
+            }
+        }
+        
+        function startMeditation() {
+            meditationRunning = true;
+            document.getElementById('meditation-toggle').textContent = 'Pause';
+            document.getElementById('meditation-toggle').classList.add('active');
+            
+            meditationInterval = setInterval(() => {
+                if (meditationTime > 0) {
+                    meditationTime--;
+                    updateTimerDisplay();
+                } else {
+                    pauseMeditation();
+                }
+            }, 1000);
+        }
+        
+        function pauseMeditation() {
+            meditationRunning = false;
+            clearInterval(meditationInterval);
+            document.getElementById('meditation-toggle').textContent = meditationTime > 0 ? 'Resume' : 'Complete';
+            document.getElementById('meditation-toggle').classList.remove('active');
+        }
+        
+        function resetTimer() {
+            pauseMeditation();
+            meditationTime = 300;
+            updateTimerDisplay();
+            document.getElementById('meditation-toggle').textContent = 'Start';
+        }
+        
+        function updateTimerDisplay() {
+            const min = Math.floor(meditationTime / 60);
+            const sec = meditationTime % 60;
+            document.getElementById('meditation-timer').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+        }
+        
+        // ===== CHAPTERS =====
+        function loadChapter(num) {
+            const chapter = chapters[num];
+            let html = `<div class="chapter-title">${chapter.title}</div><div class="chapter-text">`;
+            
+            chapter.verses.forEach((verse, i) => {
+                html += `<p><span class="verse-number">${i + 1}</span>${verse}</p>`;
+            });
+            
+            html += '</div>';
+            document.getElementById('chapter-content').innerHTML = html;
+        }
+        
+        document.querySelectorAll('.chapter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const num = btn.dataset.chapter;
+                document.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                loadChapter(num);
+            });
+        });
+        
+        // ===== INITIALIZE =====
+        initializeLetterGrid();
+        loadChapter(1);
+        updateMeditationDisplay();
+    </script>
+</body>
+</html>
